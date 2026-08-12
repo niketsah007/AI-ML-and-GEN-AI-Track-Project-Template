@@ -129,7 +129,7 @@ if generate_btn:
     if not brand_name.strip() or not purpose.strip() or not sample_texts_raw.strip():
         st.sidebar.warning("⚠️ Please fill out all required fields in the sidebar.")
     else:
-        with st.spinner("Extracting brand voice & generating content with Gemini 2.0 Flash..."):
+        with st.spinner("Extracting brand voice & generating content with Gemini AI..."):
             sample_list = [s.strip() for s in sample_texts_raw.split("\n\n") if s.strip()]
             if not sample_list:
                 sample_list = [sample_texts_raw.strip()]
