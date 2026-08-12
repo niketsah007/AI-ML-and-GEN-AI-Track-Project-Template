@@ -35,7 +35,7 @@ The **AI Brand Voice Generator** helps marketers, founders, and content creators
 
 ## 💻 Tech Stack
 
-- **AI Model**: Google Gemini 2.0 Flash (`gemini-2.0-flash`)
+- **AI Model**: Google Gemini 3.6 Flash (`gemini-2.0-flash`)
 - **Frontend**: Streamlit, Custom HTML/CSS
 - **Backend / Logic**: Python 3.9+, `google-generativeai`, `google-genai`
 - **Database**: SQLite3
