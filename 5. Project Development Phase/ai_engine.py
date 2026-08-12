@@ -1,0 +1,197 @@
+import os
+import logging
+from typing import Dict, Any, Optional
+from dotenv import load_dotenv
+
+load_dotenv()
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+DEFAULT_MODEL = "gemini-2.0-flash"
+
+
+def get_api_key(provided_key: Optional[str] = None) -> str:
+    """
+    Retrieves and validates the Gemini API key from an explicit parameter
+    or from environment variables (.env file).
+    Raises ValueError if key is missing or unconfigured.
+    """
+    api_key = provided_key or os.getenv("GEMINI_API_KEY")
+    if not api_key or not api_key.strip() or api_key.strip() == "your_gemini_api_key_here":
+        raise ValueError(
+            "GEMINI_API_KEY is missing or invalid. "
+            "Please set a valid Gemini API key in your .env file or pass it explicitly."
+        )
+    return api_key.strip()
+
+
+def _call_gemini(
+    prompt: str,
+    system_instruction: Optional[str] = None,
+    api_key: Optional[str] = None,
+    model_name: str = DEFAULT_MODEL
+) -> str:
+    """
+    Internal helper function to call Gemini 2.0 Flash API using google-genai
+    or google-generativeai fallback with proper system instructions and configuration.
+    """
+    key = get_api_key(api_key)
+
+    # Attempt 1: New google-genai SDK
+    try:
+        from google import genai
+        from google.genai import types
+
+        client = genai.Client(api_key=key)
+        config = types.GenerateContentConfig()
+        if system_instruction:
+            config.system_instruction = system_instruction
+
+        response = client.models.generate_content(
+            model=model_name,
+            contents=prompt,
+            config=config if system_instruction else None
+        )
+        if hasattr(response, 'text') and response.text:
+            return response.text
+        elif hasattr(response, 'output_text') and response.output_text:
+            return response.output_text
+    except ImportError:
+        pass
+    except Exception as e:
+        logger.warning(f"google-genai call attempt failed: {e}. Attempting google-generativeai fallback.")
+
+    # Attempt 2: Classic google-generativeai SDK fallback
+    try:
+        import google.generativeai as genai_legacy
+
+        genai_legacy.configure(api_key=key)
+
+        if system_instruction:
+            model = genai_legacy.GenerativeModel(
+                model_name=model_name,
+                system_instruction=system_instruction
+            )
+        else:
+            model = genai_legacy.GenerativeModel(model_name=model_name)
+
+        response = model.generate_content(prompt)
+        if hasattr(response, 'text') and response.text:
+            return response.text
+        return str(response)
+    except Exception as e:
+        logger.error(f"Gemini API execution error: {e}")
+        raise RuntimeError(f"Gemini API call failed: {str(e)}") from e
+
+
+def learn_brand_voice(
+    sample_text: str,
+    api_key: Optional[str] = None,
+    model_name: str = DEFAULT_MODEL
+) -> str:
+    """
+    Brand Voice Learning System:
+    Analyzes raw sample text to extract tone, vocabulary, and emotional rhythm.
+    Returns a structured System Prompt Template representing the learned brand voice.
+
+    :param sample_text: Raw reference text representing brand writing.
+    :param api_key: Optional explicit Gemini API Key.
+    :param model_name: Gemini model name (default: gemini-2.0-flash).
+    :return: System Prompt Template string.
+    """
+    # Strict validation of text input
+    if not sample_text or not sample_text.strip():
+        raise ValueError("Sample text input cannot be empty or whitespace-only.")
+
+    key = get_api_key(api_key)
+
+    meta_prompt = f"""
+You are an expert Brand Strategist and AI Prompt Engineer.
+Analyze the following raw sample text from a brand and extract its unique voice DNA.
+
+RAW SAMPLE TEXT:
+\"\"\"
+{sample_text.strip()}
+\"\"\"
+
+Please generate a comprehensive, ready-to-use System Prompt Template for AI content generators.
+The template must extract and codify:
+1. **Tone & Personality**: Core voice traits, mood, and emotional resonance.
+2. **Vocabulary & Phrasing**: Key terminology, forbidden words, power phrases, and sentence complexity.
+3. **Emotional Rhythm & Pacing**: Sentence cadence, punctuation preferences, paragraph length, and energy flow.
+4. **Writing Guidelines**: Explicit DOs and DON'Ts when generating content in this voice.
+
+Begin your response with `[BRAND VOICE SYSTEM PROMPT TEMPLATE]` and provide a clear, actionable system prompt.
+"""
+
+    return _call_gemini(prompt=meta_prompt, api_key=key, model_name=model_name)
+
+
+def generate_multi_format_content(
+    learned_voice_template: str,
+    topic: str,
+    api_key: Optional[str] = None,
+    additional_instructions: str = "",
+    model_name: str = DEFAULT_MODEL
+) -> Dict[str, Any]:
+    """
+    Multi-Format Content Generation Engine:
+    Takes a learned brand voice template and user topic to generate social posts, emails, and taglines.
+
+    :param learned_voice_template: System prompt template generated by learn_brand_voice.
+    :param topic: User topic or content brief.
+    :param api_key: Optional explicit Gemini API Key.
+    :param additional_instructions: Optional specific requests (e.g., target length, event details).
+    :param model_name: Gemini model name (default: gemini-2.0-flash).
+    :return: Dictionary containing generated content sections and raw output.
+    """
+    if not learned_voice_template or not learned_voice_template.strip():
+        raise ValueError("Learned voice template input cannot be empty or whitespace-only.")
+    if not topic or not topic.strip():
+        raise ValueError("Topic input cannot be empty or whitespace-only.")
+
+    key = get_api_key(api_key)
+
+    user_prompt = f"""
+Please generate brand marketing content for the following topic/brief, adhering strictly to the system brand voice instructions.
+
+CONTENT BRIEF / TOPIC:
+{topic.strip()}
+
+ADDITIONAL INSTRUCTIONS:
+{additional_instructions.strip() if additional_instructions else "None"}
+
+Generate the output in three distinct sections formatted with clean Markdown:
+
+### 1. Social Media Posts
+- Create 3 distinct social media posts (suitable for LinkedIn, Twitter/X, or Instagram).
+- Include appropriate emojis, formatting, and targeted hashtags.
+
+### 2. Email Campaign Draft
+- Subject Line
+- Preview Header
+- Email Body (Salutation, Hook, Value Proposition, Call to Action, Sign-off)
+
+### 3. Slogans & Taglines
+- 5 punchy, memorable taglines or slogans matching the brand rhythm.
+"""
+
+    raw_output = _call_gemini(
+        prompt=user_prompt,
+        system_instruction=learned_voice_template.strip(),
+        api_key=key,
+        model_name=model_name
+    )
+
+    return {
+        "topic": topic,
+        "learned_voice": learned_voice_template,
+        "raw_output": raw_output
+    }
+
+
+if __name__ == "__main__":
+    print("AI Engine module initialized. Functions available:")
+    print(" - learn_brand_voice(sample_text, api_key)")
+    print(" - generate_multi_format_content(learned_voice_template, topic, api_key)")
