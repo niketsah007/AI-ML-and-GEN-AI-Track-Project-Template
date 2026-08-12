@@ -273,38 +273,36 @@ else:
 st.markdown("---")
 st.markdown('<div class="sub-header">ℹ️ About AI Brand Voice Generator</div>', unsafe_allow_html=True)
 
-about_html = """
-<div class="about-card">
-    <h3 style="margin-top:0; color:#1a202c; font-size:1.4rem;">Product Overview</h3>
-    <p style="font-size:1.05rem; color:#4a5568; line-height:1.6;">
-        <strong>Purpose:</strong> An AI tool to help marketers generate brand-consistent content instantly.
-    </p>
-    
-    <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1.5rem;">
-        <div style="flex: 1; min-width: 250px;">
-            <h4 style="color:#2b6cb0; margin-bottom:0.5rem;">🛠️ Core Stack</h4>
-            <ul style="color:#4a5568; line-height:1.7;">
-                <li><strong>AI Engine:</strong> Google Gemini 2.0 Flash</li>
-                <li><strong>Frontend:</strong> Streamlit (Python)</li>
-                <li><strong>Persistence:</strong> SQLite Database</li>
-                <li><strong>Utilities:</strong> Python-dotenv, Pyperclip</li>
-            </ul>
-        </div>
-        <div style="flex: 1; min-width: 250px;">
-            <h4 style="color:#2b6cb0; margin-bottom:0.5rem;">🔄 How It Works</h4>
-            <p style="color:#4a5568; font-weight:600; background:#ffffff; padding:1rem; border-radius:10px; border:1px solid #e2e8f0;">
-                Input brand details &rarr; Provide sample text &rarr; Generate marketing copy &rarr; Refine with feedback
-            </p>
-        </div>
-        <div style="flex: 1; min-width: 250px;">
-            <h4 style="color:#2b6cb0; margin-bottom:0.5rem;">🎯 Ideal Users</h4>
-            <ul style="color:#4a5568; line-height:1.7;">
-                <li>Marketers</li>
-                <li>Founders</li>
-                <li>Content Creators</li>
-            </ul>
-        </div>
-    </div>
+about_html = """<div class="about-card">
+<h3 style="margin-top:0; color:#1a202c; font-size:1.4rem;">Product Overview</h3>
+<p style="font-size:1.05rem; color:#4a5568; line-height:1.6;">
+<strong>Purpose:</strong> An AI tool to help marketers generate brand-consistent content instantly.
+</p>
+<div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1.5rem;">
+<div style="flex: 1; min-width: 250px;">
+<h4 style="color:#2b6cb0; margin-bottom:0.5rem;">🛠️ Core Stack</h4>
+<ul style="color:#4a5568; line-height:1.7;">
+<li><strong>AI Engine:</strong> Google Gemini 2.0 Flash</li>
+<li><strong>Frontend:</strong> Streamlit (Python)</li>
+<li><strong>Persistence:</strong> SQLite Database</li>
+<li><strong>Utilities:</strong> Python-dotenv, Pyperclip</li>
+</ul>
 </div>
-"""
+<div style="flex: 1; min-width: 250px;">
+<h4 style="color:#2b6cb0; margin-bottom:0.5rem;">🔄 How It Works</h4>
+<p style="color:#4a5568; font-weight:600; background:#ffffff; padding:1rem; border-radius:10px; border:1px solid #e2e8f0;">
+Input brand details &rarr; Provide sample text &rarr; Generate marketing copy &rarr; Refine with feedback
+</p>
+</div>
+<div style="flex: 1; min-width: 250px;">
+<h4 style="color:#2b6cb0; margin-bottom:0.5rem;">🎯 Ideal Users</h4>
+<ul style="color:#4a5568; line-height:1.7;">
+<li>Marketers</li>
+<li>Founders</li>
+<li>Content Creators</li>
+</ul>
+</div>
+</div>
+</div>"""
+
 st.markdown(about_html, unsafe_allow_html=True)
