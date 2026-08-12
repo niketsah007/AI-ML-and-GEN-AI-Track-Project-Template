@@ -189,7 +189,7 @@ def save_content_generation(
     content_type: str,
     generated_text: str,
     additional_instructions: str = "",
-    model_used: str = "gemini-2.0-flash",
+    model_used: str = "gemini-3.6-flash",
     db_path: str = DB_NAME
 ) -> int:
     """Inserts a CONTENT_REQUEST and corresponding GENERATED_CONTENT record into SQLite."""
