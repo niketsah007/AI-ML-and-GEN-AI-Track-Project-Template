@@ -8,7 +8,7 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-DEFAULT_MODEL = "gemini-2.0-flash"
+DEFAULT_MODEL = "gemini-3.6-flash"
 
 
 def get_api_key(provided_key: Optional[str] = None) -> str:
