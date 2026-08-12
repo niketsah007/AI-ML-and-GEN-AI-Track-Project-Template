@@ -11,8 +11,8 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
 
-MODEL_NAME = "gemini-2.0-flash"
-FALLBACK_MODEL = "gemini-1.5-flash"
+MODEL_NAME = "gemini-3.6-flash"
+FALLBACK_MODEL = "gemini-2.5-flash"
 
 # Global Grounding Rule to eliminate meta-talk and conversational intros
 STRICT_GROUNDING = (
