@@ -282,7 +282,7 @@ about_html = """<div class="about-card">
 <div style="flex: 1; min-width: 250px;">
 <h4 style="color:#2b6cb0; margin-bottom:0.5rem;">🛠️ Core Stack</h4>
 <ul style="color:#4a5568; line-height:1.7;">
-<li><strong>AI Engine:</strong> Google Gemini 2.0 Flash</li>
+<li><strong>AI Engine:</strong> Google Gemini 3.6 Flash</li>
 <li><strong>Frontend:</strong> Streamlit (Python)</li>
 <li><strong>Persistence:</strong> SQLite Database</li>
 <li><strong>Utilities:</strong> Python-dotenv, Pyperclip</li>
