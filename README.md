@@ -47,7 +47,7 @@ The **AI Brand Voice Generator** helps marketers, founders, and content creators
 
 1. **Clone the repository**:
    ```bash
-   git clone <repo-url>
+   git clone https://github.com/niketsah007/AI-ML-and-GEN-AI-Track-Project-Template
    cd AI-ML-and-GEN-AI-Track-Project-Template
    ```
 
